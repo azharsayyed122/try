@@ -1,0 +1,15 @@
+- name: Demo on file copy 
+  hosts: all
+  become: yes
+  tasks:
+    - name: Copying the proxy file 
+      copy:  
+        src: proxy.conf
+        dest: /etc/httpd/conf.d/proxy.conf 
+
+    - name: Printing
+      debug:
+        msg: This is a {{ENV}} commit message 
+  
+    - name: Checking the shell user 
+      shell: whoami 

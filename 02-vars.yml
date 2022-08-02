@@ -1,0 +1,35 @@
+- name: Demo on using variables 
+  hosts: all 
+  vars: 
+    URL: play.google.com 
+      # Global Variable : All the tasks of this play can inherit this variable by default
+  vars_files:
+    - proja-vars.yml
+  # vars_prompt:
+  #   - name: URL
+  #     prompt: "Enter the URL"
+  #     private: no
+  tasks:
+    - name: Print the URL
+      debug:
+        msg: URL Variable value is {{URL}}
+      
+    - name: Printing url from task
+      debug:
+        msg: URL Variable value is {{URL}} 
+      vars:                    # Local Variable and the scope of the local variable is only to this task.
+        URL: task.google.com   
+      
+    - name: Print URL from CLI 
+      debug:
+        msg: URL_FROM_CLI = {{URL_FROM_CLI}}
+
+    - name: Printing the file variable 
+      debug:
+        msg: "{{FILE_URL}}"
+
+    - name: Printing the file variable and checking the precedence
+      debug:
+        msg: "{{URL}}"
+
+# CLI Variable > Local Variable > Files Variable > Global Variable > Prompt Variables 

@@ -1,0 +1,11 @@
+- name: Check Tomcat Is Running Or Not
+  hosts: all
+  tasks:
+    - name: Checking Tomcat Status 
+      shell: ps -ef |grep java |grep -v grep  ### If the exit code of this LINUX Command is non ZERO, then this task will be considered as failure and the next tasks won't be executed.
+      register: OUT 
+      ignore_errors: yes 
+    
+    - name: Starting Tomcat 
+      debug:
+        msg: Starting Tomcat

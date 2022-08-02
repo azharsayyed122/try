@@ -1,0 +1,27 @@
+- name: Demo on Conditions 
+  hosts: all 
+  vars:
+    x: abc
+    action: false
+  tasks:
+    - name: Run this when OS is RedHat
+      debug:
+        msg: Hello from RedHat
+      when: ansible_distribution == "RedHat"
+
+    - name: Run this when OS is ubuntu
+      debug:
+        msg: Hell from Ubuntu
+      when: ansible_distribution == "Debian"
+
+    - name: Demo on defined - notdefined keywords 
+      debug:
+        msg: variable X is not defined 
+      when: x is not defined
+ 
+    - name: Print me only when action is true 
+      debug:
+        msg: Hey hi, I was defined with true on ACTION
+      when: action 
+   
+# true, false , defined, not defined are the ansible conditionsal keywords 

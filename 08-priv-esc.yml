@@ -1,0 +1,12 @@
+- name: Demo on PRVILEGE ESCALATION 
+  hosts: all
+  #become: yes   # The whole playbook with all tasks will be executed as a root user.
+  tasks:
+    - name: Checking Tomcat Status 
+      shell: whoami  
+      register: OUT 
+      become: yes
+    
+    - name: Printing  SHELL output 
+      debug: 
+        msg: "{{OUT}}"

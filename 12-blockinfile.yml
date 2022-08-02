@@ -1,0 +1,21 @@
+- name: Demo on blockinfile 
+  hosts: all
+  tasks: 
+    - name: Demo on adding block 
+      blockinfile:
+        path: /home/centos/temporary.conf 
+        create: yes 
+        block: |
+          Match User ansible-agent
+          PasswordAuthentication no
+
+    - name: Demo on adding block after a specific line
+      blockinfile:
+        path: /home/centos/temp.conf 
+        insertafter: '^Hello'
+        block: |
+            This line is added just for test 
+            Dont consider this line so serious 
+            So, relax and ignore 
+
+### LineInFile if you just want to add one line.

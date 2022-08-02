@@ -1,0 +1,83 @@
+- name: Installing Java
+  package:
+    name: java 
+    state: present
+
+- name: Adding Function User 
+  user:
+    name: "{{APPUSER}}"
+    comment: "Applicaiton User" 
+
+- name: Download & Extract tomcat 
+  unarchive:
+    src: "{{TOMCAT_URL}}" 
+    dest: "{{APPUSERHOME}}"
+    remote_src: yes
+  become_user: "{{APPUSER}}"
+
+- name: Download WAR File 
+  get_url:
+    url: "{{WAR_URL}}"
+    dest: "{{APPUSERHOME}}/apache-tomcat-{{TOMCAT_VERSION}}/webapps/" 
+    mode: '0775'
+  become_user: "{{APPUSER}}"
+
+- name: Download JAR File 
+  get_url:
+    url: "{{JAR_URL}}"
+    dest: "{{APPUSERHOME}}/apache-tomcat-{{TOMCAT_VERSION}}/lib/" 
+    mode: '0775'
+  become_user: "{{APPUSER}}"
+
+- name: Copying the context file  
+  template:  
+    src: context.xml
+    dest: "{{APPUSERHOME}}/apache-tomcat-{{TOMCAT_VERSION}}/conf/"
+    mode: '0775'
+  become_user: "{{APPUSER}}"
+
+- name: Installing Mariadb-Server 
+  package:
+    name: mariadb-server
+    state: present
+
+- name: Downlod the schema 
+  get_url:
+     url: "{{SCHEMA_URL}}"
+     dest: /tmp/student.sql
+  become_user: "{{APPUSER}}" 
+
+- name: Starting Mariadb-Servre 
+  service: 
+    name: mariadb 
+    state: started 
+
+- name: Injecting the schema 
+  shell: mysql < /tmp/student.sql
+
+- name: Copying the systemd file 
+  copy:  
+    src: student.service
+    dest: /etc/systemd/system/multi-user.target.wants/
+    mode: '0775'
+
+- name: Reload the student daemon 
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: student
+
+- name: Waitning for 8 sec 
+  pause: 
+    seconds: 8
+
+- name: Assertion Testing of Student Availability Check 
+  uri:
+    url: http://localhost:8080/student
+
+# - name: Start Student User 
+#   service:
+#     name: student
+#     state: restarted 
+#     enabled: yes
+#   become_user: "{{APPUSER}}"  

@@ -1,0 +1,31 @@
+- name: Demo on using register 
+  hosts: all
+  tasks:
+    - name: Execute Shel Command 
+      shell: uptime
+      register: OUT 
+    
+    - name: Printing uptime variable 
+      debug:
+        msg: "{{OUT.stdout}}"
+      
+    - name: Declare variable 
+      set_fact:
+         STATUS: "{{OUT.rc}}"  
+
+    - name: Printing uptime status code 
+      debug:
+        msg: "Status of uptime : {{STATUS}}"
+
+# You can pass the OUTPUT of one play to another play or task in another play using this SET FACT 
+- name: Demo on using register play2
+  hosts: all
+  tasks:
+    - name: print variable from play1 
+      debug:
+        msg: "Status of uptime : {{STATUS}}" 
+    - name: printing shell output 
+      debug:
+        msg: "{{OUT}}"
+
+# This is a test commit

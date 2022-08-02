@@ -1,0 +1,32 @@
+- name: Demo on tags 
+  hosts: all 
+  tasks:
+    - name: Performing webserver installation 
+      debug:
+        msg: web installation in progress 
+      tags: web
+    
+    - name: Checking web server status 
+      debug:
+        msg: web servier in up 
+      tags: web
+
+    - name: Performing app installation 
+      debug:
+        msg: app installation in progress 
+      tags: app
+
+    - name: Checking app server status 
+      debug:
+        msg: app servier in up 
+      tags: app
+
+    - name: Performing DB installation 
+      debug:
+        msg: DB installation in progress 
+      tags: db 
+
+    - name: Checking DB server status 
+      debug:
+        msg: db servier in up 
+      tags: db 

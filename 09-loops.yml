@@ -1,0 +1,12 @@
+- name: Demo on loops 
+  hosts: all 
+  tasks:  
+    - name: Demo on loops 
+      debug:
+        msg:  "value = {{item}}"
+      loop:
+        - 10
+        - 20
+        - 30
+        - 40
+        - 50
